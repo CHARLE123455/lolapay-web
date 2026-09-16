@@ -1,8 +1,8 @@
 import axios, { type AxiosInstance, type AxiosResponse, type InternalAxiosRequestConfig } from 'axios';
 import { ENDPOINTS } from './endpoints';
-import { ApiError, type ApiEnvelope, type AuthResult, messageOf } from './types';
+import { ApiError, messageOf, type ApiEnvelope, type AuthResult } from './types';
 
-const baseURL = import.meta.env.VITE_API_BASE_URL as string | undefined;
+const baseURL = (import.meta.env.VITE_API_BASE_URL as string | undefined) ?? '';
 if (!baseURL) throw new Error('VITE_API_BASE_URL is not set.');
 
 const LOGIN_PATH = (import.meta.env.VITE_LOGIN_PATH as string) || '/login';
@@ -12,50 +12,50 @@ const REFRESH_KEY = 'lolapay.refresh';
 const USER_KEY = 'lolapay.user';
 
 export const tokenStore = {
-    getAccess: (): string | null => sessionStorage.getItem(ACCESS_KEY),
-    getRefresh: (): string | null => localStorage.getItem(REFRESH_KEY),
-    set: (access: string, refresh: string) => {
-        sessionStorage.setItem(ACCESS_KEY, access);
-        localStorage.setItem(REFRESH_KEY, refresh);
-    },
-    clear: () => {
-        sessionStorage.removeItem(ACCESS_KEY);
-        localStorage.removeItem(REFRESH_KEY);
-        localStorage.removeItem(USER_KEY);
-    },
-    getUser: (): string | null => localStorage.getItem(USER_KEY),
-    setUser: (json: string) => localStorage.setItem(USER_KEY, json),
+  getAccess: (): string | null => sessionStorage.getItem(ACCESS_KEY),
+  getRefresh: (): string | null => localStorage.getItem(REFRESH_KEY),
+  set: (access: string, refresh: string) => {
+    sessionStorage.setItem(ACCESS_KEY, access);
+    localStorage.setItem(REFRESH_KEY, refresh);
+  },
+  clear: () => {
+    sessionStorage.removeItem(ACCESS_KEY);
+    localStorage.removeItem(REFRESH_KEY);
+    localStorage.removeItem(USER_KEY);
+  },
+  getUser: (): string | null => localStorage.getItem(USER_KEY),
+  setUser: (json: string) => localStorage.setItem(USER_KEY, json),
 };
 
 export const AUTH_EXPIRED_EVENT = 'lolapay:auth-expired';
 
 const api: AxiosInstance = axios.create({
-    baseURL,
-    headers: { 'Content-Type': 'application/json', Accept: 'application/json' },
-    timeout: 30_000,
+  baseURL,
+  headers: { 'Content-Type': 'application/json', Accept: 'application/json' },
+  timeout: 30_000,
 });
 
 api.interceptors.request.use((config: InternalAxiosRequestConfig): InternalAxiosRequestConfig => {
-    const token = tokenStore.getAccess();
-    if (token) config.headers.Authorization = `Bearer ${token}`;
-    return config;
+  const token = tokenStore.getAccess();
+  if (token) config.headers.Authorization = `Bearer ${token}`;
+  return config;
 });
 
 let refreshing: Promise<string | null> | null = null;
 let loggingOut = false;
 
 async function refreshAccessToken(): Promise<string | null> {
-    const refreshToken = tokenStore.getRefresh();
-    if (!refreshToken) return null;
-    try {
-        const { data } = await axios.post<ApiEnvelope<AuthResult>>(`${baseURL}${ENDPOINTS.auth.refresh}`, { refreshToken });
-        if (!data.data) return null;
-        tokenStore.set(data.data.accessToken, data.data.refreshToken);
-        tokenStore.setUser(JSON.stringify(data.data.user));
-        return data.data.accessToken;
-    } catch {
-        return null;
-    }
+  const refreshToken = tokenStore.getRefresh();
+  if (!refreshToken) return null;
+  try {
+    const { data } = await axios.post<ApiEnvelope<AuthResult>>(`${baseURL}${ENDPOINTS.auth.refresh}`, { refreshToken });
+    if (!data.data) return null;
+    tokenStore.set(data.data.accessToken, data.data.refreshToken);
+    tokenStore.setUser(JSON.stringify(data.data.user));
+    return data.data.accessToken;
+  } catch {
+    return null;
+  }
 }
 
 function forceLogout() {
