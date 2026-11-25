@@ -1,12 +1,10 @@
-import { Wallet } from "lucide-react";
+import { Link } from 'react-router-dom';
 
-export function Brand() {
+export function Brand({ dark = false, to = '/' }: { dark?: boolean; to?: string }) {
   return (
-    <div className="brand">
-      <span className="brand-mark">
-        <Wallet size={16} />
-      </span>
-      LolaPay
-    </div>
+    <Link to={to} className="brand">
+      <img src={dark ? '/logo-mark-dark.svg' : '/logo-mark.svg'} alt="LolaPay" className="brand-logo" />
+      Lola<span className="brand-accent">Pay</span>
+    </Link>
   );
 }

@@ -5,7 +5,7 @@ import { Brand } from "../components/layout/Brand";
 function Hero() {
   return (
     <aside className="auth-hero">
-      <Brand />
+      <Brand dark />
       <div>
         <h1>
           Send money to the

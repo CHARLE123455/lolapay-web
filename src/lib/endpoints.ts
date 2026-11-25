@@ -57,6 +57,15 @@ export const ENDPOINTS = {
         revoke: (id: string) => `${V1}/sessions/${id}`,
     },
 
+    admin: {
+        overview: `${V1}/admin/overview`,
+        users: `${V1}/admin/users`,
+        user: (id: string) => `${V1}/admin/users/${id}`,
+        userStatus: (id: string) => `${V1}/admin/users/${id}/status`,
+        userRole: (id: string) => `${V1}/admin/users/${id}/role`,
+        transfers: `${V1}/admin/transfers`,
+    },
+
     notifications: {
         list: `${V1}/notifications`,
         readAll: `${V1}/notifications/read-all`,

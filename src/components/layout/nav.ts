@@ -7,7 +7,7 @@ export interface NavItem {
 }
 
 export const NAV: NavItem[] = [
-  { to: '/', label: 'Dashboard', icon: LayoutDashboard },
+  { to: '/dashboard', label: 'Dashboard', icon: LayoutDashboard },
   { to: '/send', label: 'Send', icon: Send },
   { to: '/history', label: 'History', icon: Clock },
   { to: '/beneficiaries', label: 'Beneficiaries', icon: Users },

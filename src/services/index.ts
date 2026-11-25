@@ -7,3 +7,4 @@ export { beneficiariesService } from './beneficiaries.service';
 export { cardsService } from './cards.service';
 export { sessionsService } from './sessions.service';
 export { notificationsService } from './notifications.service';
+export { adminService } from './admin.service';

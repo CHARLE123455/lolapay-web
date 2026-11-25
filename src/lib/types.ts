@@ -40,6 +40,8 @@ export function messageOf(body: ApiEnvelope | undefined, fallback = 'Something w
   return body?.message ?? fallback;
 }
 
+export type UserRole = 'USER' | 'ADMIN';
+export type TransferStatus = 'PENDING' | 'COMPLETED' | 'FAILED';
 
 export interface User {
   id: string;
@@ -52,6 +54,7 @@ export interface User {
   avatarUrl: string | null;
   provider: string;
   hasPassword: boolean;
+  role: UserRole;
   createdAt: string;
 }
 
@@ -245,4 +248,61 @@ export interface CreateBeneficiaryInput {
 export function errorMessage(e: unknown, fallback = 'Something went wrong. Please try again.'): string {
   if (e instanceof ApiError || e instanceof Error) return e.message || fallback;
   return fallback;
+}
+
+export interface AdminOverview {
+  users: { total: number; active: number; newToday: number };
+  transfers: { total: number; today: number; failed: number };
+  volume: { total: string; today: string };
+  balances: { total: string };
+  cards: { active: number };
+  daily: { date: string; count: number; volume: string }[];
+}
+
+export interface AdminUser {
+  id: string;
+  email: string;
+  tag: string;
+  firstName: string;
+  lastName: string;
+  fullName: string;
+  avatarUrl: string | null;
+  provider: string;
+  role: UserRole;
+  isActive: boolean;
+  accountNumber: string | null;
+  balance: string;
+  transfersSent: number;
+  transfersReceived: number;
+  createdAt: string;
+}
+
+export interface AdminTransfer {
+  id: string;
+  reference: string;
+  amount: string;
+  currency: string;
+  note: string | null;
+  status: TransferStatus;
+  failReason: string | null;
+  sender: UserSummary;
+  recipient: UserSummary;
+  createdAt: string;
+}
+
+export interface AdminUsersQuery {
+  page?: number;
+  limit?: number;
+  q?: string;
+  status?: 'active' | 'inactive';
+  role?: UserRole;
+}
+
+export interface AdminTransfersQuery {
+  page?: number;
+  limit?: number;
+  q?: string;
+  status?: TransferStatus;
+  from?: string;
+  to?: string;
 }

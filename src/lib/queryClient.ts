@@ -27,4 +27,9 @@ export const QK = {
     notifications: ['notifications'] as const,
     userSearch: (q: string) => ['users', 'search', q] as const,
     providers: ['auth', 'providers'] as const,
+    admin: {
+        overview: ['admin', 'overview'] as const,
+        users: (params?: Record<string, unknown>) => ['admin', 'users', params ?? {}] as const,
+        transfers: (params?: Record<string, unknown>) => ['admin', 'transfers', params ?? {}] as const,
+    },
 };

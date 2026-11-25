@@ -6,6 +6,7 @@ import { AuthProvider } from './context/AuthContext';
 import { useAuth } from './context/useAuth';
 import { AppShell } from './components/layout/AppShell';
 import { FullPageSpinner, ToastProvider } from './components/ui';
+import LandingPage from './pages/Landing';
 import LoginPage from './pages/Login';
 import RegisterPage from './pages/Register';
 import OAuthCallbackPage from './pages/OAuthCallback';
@@ -30,15 +31,22 @@ function RequireAuth() {
   );
 }
 
+function Home() {
+  const { isAuthenticated, loading } = useAuth();
+  if (loading) return <FullPageSpinner />;
+  return isAuthenticated ? <Navigate to="/dashboard" replace /> : <LandingPage />;
+}
+
 function PublicOnly() {
   const { isAuthenticated, loading } = useAuth();
   if (loading) return <FullPageSpinner />;
-  return isAuthenticated ? <Navigate to="/" replace /> : <Outlet />;
+  return isAuthenticated ? <Navigate to="/dashboard" replace /> : <Outlet />;
 }
 
 function Router() {
   return (
     <Routes>
+      <Route path="/" element={<Home />} />
       <Route element={<PublicOnly />}>
         <Route path="/login" element={<LoginPage />} />
         <Route path="/register" element={<RegisterPage />} />
@@ -46,7 +54,7 @@ function Router() {
       <Route path="/auth/callback" element={<OAuthCallbackPage />} />
 
       <Route element={<RequireAuth />}>
-        <Route path="/" element={<DashboardPage />} />
+        <Route path="/dashboard" element={<DashboardPage />} />
         <Route path="/send" element={<SendPage />} />
         <Route path="/history" element={<HistoryPage />} />
         <Route path="/beneficiaries" element={<BeneficiariesPage />} />
@@ -56,7 +64,7 @@ function Router() {
         <Route path="/settings" element={<SettingsPage />} />
       </Route>
 
-      <Route path="*" element={<Navigate to="/" replace />} />
+      <Route path="*" element={<Navigate to="/dashboard" replace />} />
     </Routes>
   );
 }

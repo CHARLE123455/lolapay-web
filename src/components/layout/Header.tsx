@@ -1,8 +1,8 @@
+import { ChevronDown, LogOut, Shield, User as UserIcon } from "lucide-react";
 import { useState } from "react";
 import { NavLink } from "react-router-dom";
-import { ChevronDown, LogOut, Shield, User as UserIcon } from "lucide-react";
-import type { User } from "../../lib/types";
 import { useClickOutside } from "../../hooks/useClickOutside";
+import type { User } from "../../lib/types";
 import { Avatar } from "../ui";
 import { Brand } from "./Brand";
 import { NotificationsMenu } from "./NotificationsMenu";
@@ -20,7 +20,7 @@ export function Header({
 
   return (
     <header className="app-header">
-      <Brand />
+      <Brand to="/dashboard" />
       <nav className="top-nav">
         {TOP_NAV.map((n) => (
           <NavLink key={n.to} to={n.to} end={n.to === "/"}>

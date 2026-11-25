@@ -21,7 +21,7 @@ export default function RegisterPage() {
   const submit = async (e: SubmitEvent) => {
     e.preventDefault();
     setBusy(true);
-    setError('');
+    setError("");
     setFieldErrors({});
     try {
       await register({
@@ -29,10 +29,10 @@ export default function RegisterPage() {
         lastName: form.lastName.trim(),
         email: form.email.trim(),
         password: form.password,
-        ...(form.tag ? { tag: form.tag.replace(/^@/, '') } : {}),
+        ...(form.tag ? { tag: form.tag.replace(/^@/, "") } : {}),
         ...(form.phone ? { phone: form.phone } : {}),
       });
-      navigate('/', { replace: true });
+      navigate("/dashboard", { replace: true });
     } catch (err) {
       if (err instanceof ApiError && err.details?.length) {
         const fe: Partial<Record<Field, string>> = {};

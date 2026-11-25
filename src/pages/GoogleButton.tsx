@@ -1,18 +1,26 @@
-import { useNavigate } from "react-router-dom";
 import { GoogleLogin } from "@react-oauth/google";
+import { useRef } from "react";
+import { useNavigate } from "react-router-dom";
 import { useAuth } from "../context/useAuth";
 import { useAuthProviders } from "../hooks/queries";
 import { errorMessage } from "../lib/types";
 
 const CLIENT_ID = import.meta.env.VITE_GOOGLE_CLIENT_ID as string | undefined;
-const API_URL = import.meta.env.VITE_API_BASE_URL as string;
+const API_URL = (
+  (import.meta.env.VITE_API_BASE_URL as string | undefined) ?? ""
+).replace(/\/+$/, "");
 
+const buttonWidth = () =>
+  String(Math.max(200, Math.min(400, window.innerWidth - 48)));
 
 export function GoogleButton({ onError }: { onError: (m: string) => void }) {
   const { loginWithGoogle } = useAuth();
   const navigate = useNavigate();
   const { data: providers } = useAuthProviders();
+  const inFlight = useRef(false);
+
   if (!providers?.google) return null;
+  if (!CLIENT_ID && !API_URL) return null;
 
   return (
     <>
@@ -20,22 +28,34 @@ export function GoogleButton({ onError }: { onError: (m: string) => void }) {
       <div style={{ display: "flex", justifyContent: "center" }}>
         {CLIENT_ID ? (
           <GoogleLogin
-            width="400"
+            width={buttonWidth()}
             onSuccess={async (cred) => {
-              if (!cred.credential)
-                return onError("Google did not return a token");
+              if (inFlight.current) return;
+              if (!cred.credential) {
+                onError("Google did not return a token");
+                return;
+              }
+              inFlight.current = true;
               try {
                 await loginWithGoogle(cred.credential);
-                navigate("/", { replace: true });
+                navigate("/dashboard", { replace: true });
               } catch (e) {
                 onError(errorMessage(e));
+              } finally {
+                inFlight.current = false;
               }
             }}
             onError={() => onError("Google sign-in failed")}
           />
         ) : (
           <a className="btn btn-google" href={`${API_URL}/auth/google`}>
-            <svg width="18" height="18" viewBox="0 0 48 48" aria-hidden>
+            <svg
+              width="18"
+              height="18"
+              viewBox="0 0 48 48"
+              aria-hidden="true"
+              focusable="false"
+            >
               <path
                 fill="#EA4335"
                 d="M24 9.5c3.5 0 6.6 1.2 9 3.5l6.7-6.7C35.6 2.5 30.2 0 24 0 14.6 0 6.5 5.4 2.6 13.2l7.8 6C12.3 13.4 17.7 9.5 24 9.5z"
