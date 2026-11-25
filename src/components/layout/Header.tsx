@@ -1,4 +1,10 @@
-import { ChevronDown, LogOut, Shield, User as UserIcon } from "lucide-react";
+import {
+  ChevronDown,
+  LayoutDashboard,
+  LogOut,
+  Shield,
+  User as UserIcon,
+} from "lucide-react";
 import { useState } from "react";
 import { NavLink } from "react-router-dom";
 import { useClickOutside } from "../../hooks/useClickOutside";
@@ -69,6 +75,15 @@ export function Header({
             >
               <Shield size={16} /> Security
             </NavLink>
+            {user.role === "ADMIN" && (
+              <NavLink
+                to="/admin"
+                className="item"
+                onClick={() => setMenu(false)}
+              >
+                <LayoutDashboard size={16} /> Admin console
+              </NavLink>
+            )}
             <button
               className="item"
               style={{

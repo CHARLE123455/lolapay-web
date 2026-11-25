@@ -18,6 +18,10 @@ import CardPage from './pages/Card';
 import SecurityPage from './pages/Security';
 import SettingsPage from './pages/Settings';
 import BeneficiariesPage from './pages/Beneficiaries';
+import { AdminShell } from './components/admin/AdminShell';
+import AdminOverviewPage from './pages/admin/Overview';
+import AdminUsersPage from './pages/admin/Users';
+import AdminTransfersPage from './pages/admin/Transfers';
 
 function RequireAuth() {
   const { isAuthenticated, loading } = useAuth();
@@ -28,6 +32,19 @@ function RequireAuth() {
     <AppShell>
       <Outlet />
     </AppShell>
+  );
+}
+
+function RequireAdmin() {
+  const { user, isAuthenticated, loading } = useAuth();
+  const location = useLocation();
+  if (loading) return <FullPageSpinner />;
+  if (!isAuthenticated) return <Navigate to="/login" replace state={{ from: location.pathname }} />;
+  if (user?.role !== 'ADMIN') return <Navigate to="/dashboard" replace />;
+  return (
+    <AdminShell>
+      <Outlet />
+    </AdminShell>
   );
 }
 
@@ -62,6 +79,12 @@ function Router() {
         <Route path="/card" element={<CardPage />} />
         <Route path="/security" element={<SecurityPage />} />
         <Route path="/settings" element={<SettingsPage />} />
+      </Route>
+
+      <Route element={<RequireAdmin />}>
+        <Route path="/admin" element={<AdminOverviewPage />} />
+        <Route path="/admin/users" element={<AdminUsersPage />} />
+        <Route path="/admin/transfers" element={<AdminTransfersPage />} />
       </Route>
 
       <Route path="*" element={<Navigate to="/dashboard" replace />} />

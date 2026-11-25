@@ -775,7 +775,6 @@ p {
   }
 }
 
-/* ---------- Misc ---------- */
 .row {
   display: flex;
   align-items: center;
@@ -974,6 +973,7 @@ p {
   }
 }
 
+/* ---------- Spinner ---------- */
 .spinner {
   display: inline-block;
   border: 3px solid var(--line);
@@ -989,5 +989,220 @@ p {
 @keyframes spin {
   to {
     transform: rotate(360deg);
+  }
+}
+
+.admin {
+  display: grid;
+  grid-template-columns: 250px 1fr;
+  min-height: 100vh;
+}
+.admin-side {
+  background: var(--surface);
+  border-right: 1px solid var(--line);
+  display: flex;
+  flex-direction: column;
+  padding: 18px 14px;
+  position: sticky;
+  top: 0;
+  height: 100vh;
+}
+.admin-side-brand {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 0 8px 18px;
+}
+.admin-tag {
+  font-size: 10px;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  background: var(--accent, #ff2d9b);
+  color: #fff;
+  padding: 3px 8px;
+  border-radius: 999px;
+}
+.admin-nav {
+  display: grid;
+  gap: 4px;
+}
+.admin-nav a {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 11px 14px;
+  border-radius: 12px;
+  font-weight: 600;
+  color: var(--muted);
+}
+.admin-nav a:hover {
+  background: var(--bg);
+  color: var(--text);
+}
+.admin-nav a.active {
+  background: var(--primary-soft);
+  color: var(--primary);
+}
+.admin-side-footer {
+  margin-top: auto;
+  display: grid;
+  gap: 12px;
+}
+.admin-back {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--primary);
+  padding: 0 8px;
+}
+.admin-me {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 10px;
+  border-radius: 12px;
+  background: var(--bg);
+  font-size: 13px;
+}
+.admin-me div {
+  flex: 1;
+  min-width: 0;
+}
+.admin-me strong,
+.admin-me small {
+  display: block;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+.admin-me small {
+  color: var(--muted);
+}
+.admin-main {
+  padding: 28px 32px;
+  min-width: 0;
+}
+.table-wrap {
+  overflow-x: auto;
+}
+.table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 13px;
+}
+.table th {
+  text-align: left;
+  font-size: 11px;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  color: var(--muted);
+  font-weight: 600;
+  padding: 10px 12px;
+  border-bottom: 1px solid var(--line);
+}
+.table td {
+  padding: 12px;
+  border-bottom: 1px solid var(--line);
+  vertical-align: middle;
+}
+.table tr:last-child td {
+  border-bottom: 0;
+}
+.table td.empty {
+  text-align: center;
+  padding: 40px;
+}
+.cell-user {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  min-width: 180px;
+}
+.cell-user strong,
+.cell-user small {
+  display: block;
+  white-space: nowrap;
+}
+.cell-user small {
+  color: var(--muted);
+}
+.mono {
+  font-family: ui-monospace, SFMono-Regular, Menlo, monospace;
+  font-size: 12px;
+}
+.muted {
+  color: var(--muted);
+}
+.pill {
+  display: inline-block;
+  padding: 3px 10px;
+  border-radius: 999px;
+  font-size: 11px;
+  font-weight: 700;
+  background: var(--bg);
+  color: var(--muted);
+}
+.pill-primary {
+  background: var(--primary-soft);
+  color: var(--primary);
+}
+.pill-success {
+  background: #e6f7ee;
+  color: #17b26a;
+}
+.pill-warning {
+  background: #fff4e0;
+  color: #b7791f;
+}
+.pill-danger {
+  background: #fdeaea;
+  color: #e5484d;
+}
+.bars {
+  display: grid;
+  grid-template-columns: repeat(14, 1fr);
+  gap: 8px;
+  height: 200px;
+  align-items: end;
+}
+.bar {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: flex-end;
+  height: 100%;
+  gap: 6px;
+}
+.bar-fill {
+  width: 100%;
+  border-radius: 8px 8px 4px 4px;
+  background: linear-gradient(180deg, var(--primary), var(--primary-dark, #2f57d6));
+  transition: height 0.4s ease;
+}
+.bar small {
+  font-size: 10px;
+  color: var(--muted);
+}
+@media (max-width: 900px) {
+  .admin {
+    grid-template-columns: 1fr;
+  }
+  .admin-side {
+    position: static;
+    height: auto;
+    border-right: 0;
+    border-bottom: 1px solid var(--line);
+  }
+  .admin-nav {
+    grid-auto-flow: column;
+  }
+  .admin-side-footer {
+    display: none;
+  }
+  .admin-main {
+    padding: 20px 16px;
   }
 }
